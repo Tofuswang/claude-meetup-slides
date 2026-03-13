@@ -299,40 +299,31 @@
     </div>
   </div>
 
-  <!-- 3: Zeabur Credit -->
-  <div class="slide slide--light slide--center" data-slide="3">
-    <div class="slide-label">Free Credit</div>
-    <img src="zeabur-logo-light.svg" alt="Zeabur" style="height:clamp(48px,6vw,84px);margin-bottom:3vh;">
-    <div class="slide-subtitle">掃描 QR Code 領取 $10 USD 部署額度</div>
-    <a href="https://zeabur.com" target="_blank" rel="noopener" style="text-decoration:none;cursor:pointer;" onclick="event.stopPropagation();">
-      <img src="zeabur-qr.png" alt="Zeabur Gift Code QR" style="width:clamp(220px,24vw,400px);height:clamp(220px,24vw,400px);border-radius:20px;margin-top:3vh;object-fit:contain;">
-    </a>
-    <a href="https://zeabur.com" target="_blank" rel="noopener" style="margin-top:2vh;font-family:'Anthropic Mono',monospace;font-size:clamp(14px,1.6vw,24px);color:var(--accent);letter-spacing:2px;text-decoration:none;cursor:pointer;" onclick="event.stopPropagation();">zeabur.com →</a>
-    <div class="slide-footer"><span>Taipei · Claude Code for Everyone</span><span></span></div>
+  <!-- 3: Break + Scan -->
+  <div class="slide slide--dark" data-slide="3" style="justify-content:center;">
+    <div class="slide-label" style="text-align:center;animation:pulse 2s ease-in-out infinite;">BREAK · 休息時間</div>
+    <div class="slide-title" style="text-align:center;font-size:clamp(40px,5vw,80px);margin-bottom:2vh;">趁現在掃起來 📱</div>
+    <div style="display:flex;justify-content:center;gap:6vw;margin-top:3vh;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <a href="https://tofuslink.zeabur.app/claude-0314" target="_blank" rel="noopener" style="text-decoration:none;cursor:pointer;" onclick="event.stopPropagation();">
+          <img src="slido-qr.png" alt="Slido QR" style="width:clamp(180px,20vw,320px);height:clamp(180px,20vw,320px);border-radius:16px;object-fit:contain;background:white;padding:10px;">
+        </a>
+        <div style="margin-top:1.5vh;font-family:'Anthropic Mono',monospace;font-size:clamp(14px,1.6vw,24px);color:var(--accent);letter-spacing:2px;">Slido Q&A</div>
+        <a href="https://tofuslink.zeabur.app/claude-0314" target="_blank" rel="noopener" style="font-family:'Anthropic Mono',monospace;font-size:clamp(20px,2.5vw,40px);color:#FAF9F5;font-weight:600;letter-spacing:3px;text-decoration:none;cursor:pointer;margin-top:0.5vh;" onclick="event.stopPropagation();">#1833441</a>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <a href="https://zeabur.com" target="_blank" rel="noopener" style="text-decoration:none;cursor:pointer;" onclick="event.stopPropagation();">
+          <img src="zeabur-qr.png" alt="Zeabur QR" style="width:clamp(180px,20vw,320px);height:clamp(180px,20vw,320px);border-radius:16px;object-fit:contain;">
+        </a>
+        <div style="margin-top:1.5vh;font-family:'Anthropic Mono',monospace;font-size:clamp(14px,1.6vw,24px);color:var(--accent);letter-spacing:2px;">Zeabur $10 Credit</div>
+        <a href="https://zeabur.com" target="_blank" rel="noopener" style="font-family:'Anthropic Mono',monospace;font-size:clamp(14px,1.4vw,22px);color:rgba(250,249,245,0.5);text-decoration:none;cursor:pointer;margin-top:0.5vh;" onclick="event.stopPropagation();">zeabur.com →</a>
+      </div>
+    </div>
+    <div class="slide-footer"><span>Taipei · Claude Code for Everyone</span><span>We'll be back shortly ✸</span></div>
   </div>
 
-  <!-- 4: Break -->
-  <div class="slide slide--accent slide--center" data-slide="4">
-    <div class="slide-title">Break</div>
-    <div class="slide-subtitle" style="color:rgba(250,249,245,0.8);">休息 5 分鐘 · 上廁所 · 喝水 · 交流</div>
-    <div class="serif-italic">We'll be back shortly.</div>
-  </div>
-
-  <!-- 5: Slido -->
-  <div class="slide slide--dark slide--center" data-slide="5">
-    <div class="slide-label">Interactive</div>
-    <div class="slide-title">Slido Q&A</div>
-    <div class="slide-subtitle">用 Slido 即時提問 & 投票</div>
-    <a href="https://tofuslink.zeabur.app/claude-0314" target="_blank" rel="noopener" style="text-decoration:none;cursor:pointer;" onclick="event.stopPropagation();">
-      <img src="slido-qr.png" alt="Slido QR Code" style="width:clamp(220px,24vw,400px);height:clamp(220px,24vw,400px);border-radius:20px;margin-top:2vh;object-fit:contain;background:white;padding:10px;">
-    </a>
-    <a href="https://tofuslink.zeabur.app/claude-0314" target="_blank" rel="noopener" class="code-block" style="text-decoration:none;cursor:pointer;" onclick="event.stopPropagation();">#1833441</a>
-    <div style="font-size:clamp(14px,1.4vw,22px);color:rgba(250,249,245,0.35);">點擊或掃碼加入 → slido.com</div>
-    <div class="slide-footer"><span>Taipei · Claude Code for Everyone</span><span></span></div>
-  </div>
-
-  <!-- 6: Speaker -->
-  <div class="slide slide--warm" data-slide="6">
+  <!-- 4: Speaker -->
+  <div class="slide slide--warm" data-slide="4">
     <div class="accent-strip"></div>
     <div class="slide-label">Next Speaker</div>
     <div class="speaker-card">
@@ -346,8 +337,21 @@
     <div class="slide-footer"><span>Taipei · Claude Code for Everyone</span><span></span></div>
   </div>
 
-  <!-- 7: Wrap Up -->
-  <div class="slide slide--light" data-slide="7">
+  <!-- 5: Slido Q&A (after Yuanlin) -->
+  <div class="slide slide--dark slide--center" data-slide="5">
+    <div class="slide-label">Interactive</div>
+    <div class="slide-title">Slido Q&A</div>
+    <div class="slide-subtitle">用 Slido 即時提問 & 投票</div>
+    <a href="https://tofuslink.zeabur.app/claude-0314" target="_blank" rel="noopener" style="text-decoration:none;cursor:pointer;" onclick="event.stopPropagation();">
+      <img src="slido-qr.png" alt="Slido QR Code" style="width:clamp(200px,22vw,360px);height:clamp(200px,22vw,360px);border-radius:20px;margin-top:2vh;object-fit:contain;background:white;padding:10px;">
+    </a>
+    <a href="https://tofuslink.zeabur.app/claude-0314" target="_blank" rel="noopener" class="code-block" style="text-decoration:none;cursor:pointer;" onclick="event.stopPropagation();">#1833441</a>
+    <div style="font-size:clamp(14px,1.4vw,22px);color:rgba(250,249,245,0.35);">點擊或掃碼加入</div>
+    <div class="slide-footer"><span>Taipei · Claude Code for Everyone</span><span></span></div>
+  </div>
+
+  <!-- 6: Wrap Up -->
+  <div class="slide slide--light" data-slide="6">
     <div class="sparkle sparkle--large"><svg viewBox="0 0 24 24" fill="#D97757"><path d="M11.376 24L10.776 23.544L10.44 22.8L10.776 21.312L11.16 19.392L11.472 17.856L11.76 15.96L11.928 15.336L11.904 15.288L11.784 15.312L10.344 17.28L8.16 20.232L6.432 22.056L6.024 22.224L5.304 21.864L5.376 21.192L5.784 20.616L8.16 17.568L9.6 15.672L10.536 14.592L10.512 14.448H10.464L4.128 18.576L3 18.72L2.496 18.264L2.568 17.52L2.808 17.28L4.704 15.96L9.432 13.32L9.504 13.08L9.432 12.96H9.192L8.4 12.912L5.712 12.84L3.384 12.744L1.104 12.624L0.528 12.504L0 11.784L0.048 11.424L0.528 11.112L1.224 11.16L2.736 11.28L5.016 11.424L6.672 11.52L9.12 11.784H9.504L9.552 11.616L9.432 11.52L9.336 11.424L6.96 9.84L4.416 8.16L3.072 7.176L2.352 6.672L1.992 6.216L1.848 5.208L2.496 4.488L3.384 4.56L3.6 4.608L4.488 5.304L6.384 6.768L8.88 8.616L9.24 8.904L9.408 8.808V8.736L9.24 8.472L7.896 6.024L6.456 3.528L5.808 2.496L5.64 1.872C5.576 1.656 5.544 1.416 5.544 1.152L6.288 .144L6.696 0L7.704 .144L8.112 .504L8.736 1.92L9.72 4.152L11.28 7.176L11.736 8.088L11.976 8.904L12.072 9.168H12.24V9.024L12.36 7.296L12.6 5.208L12.84 2.52L12.912 1.752L13.296 .84L14.04 .36L14.616 .624L15.096 1.32L15.024 1.752L14.76 3.6L14.184 6.504L13.824 8.472H14.04L14.28 8.208L15.264 6.912L16.92 4.848L17.64 4.032L18.504 3.12L19.056 2.688H20.088L20.832 3.816L20.496 4.992L19.44 6.336L18.552 7.464L17.28 9.168L16.512 10.536L16.584 10.632H16.752L19.608 10.008L21.168 9.744L22.992 9.432L23.832 9.816L23.928 10.2L23.592 11.016L21.624 11.496L19.32 11.952L15.888 12.768L15.84 12.792L15.888 12.864L17.424 13.008L18.096 13.056H19.728L22.752 13.272L23.544 13.8L24 14.424L23.928 14.928L22.704 15.528L21.072 15.144L17.232 14.232L15.936 13.92H15.744V14.016L16.848 15.096L18.84 16.896L21.36 19.224L21.48 19.8L21.168 20.28L20.832 20.232L18.624 18.552L17.76 17.808L15.84 16.2H15.72V16.368L16.152 17.016L18.504 20.544L18.624 21.624L18.456 21.96L17.832 22.176L17.184 22.056L15.792 20.136L14.376 17.952L13.224 16.008L13.104 16.104L12.408 23.352L12.096 23.712L11.376 24Z"/></svg></div>
     <div class="slide-label">Wrap Up</div>
     <div class="slide-title">謝謝大家</div>
@@ -360,8 +364,8 @@
     <div class="slide-footer"><span>Taipei · Claude Code for Everyone</span><span></span></div>
   </div>
 
-  <!-- 8: Networking -->
-  <div class="slide slide--dark slide--center" data-slide="8">
+  <!-- 7: Networking -->
+  <div class="slide slide--dark slide--center" data-slide="7">
     <div class="sparkle sparkle--tr" style="opacity:0.12;"><svg viewBox="0 0 24 24" fill="#D97757"><path d="M11.376 24L10.776 23.544L10.44 22.8L10.776 21.312L11.16 19.392L11.472 17.856L11.76 15.96L11.928 15.336L11.904 15.288L11.784 15.312L10.344 17.28L8.16 20.232L6.432 22.056L6.024 22.224L5.304 21.864L5.376 21.192L5.784 20.616L8.16 17.568L9.6 15.672L10.536 14.592L10.512 14.448H10.464L4.128 18.576L3 18.72L2.496 18.264L2.568 17.52L2.808 17.28L4.704 15.96L9.432 13.32L9.504 13.08L9.432 12.96H9.192L8.4 12.912L5.712 12.84L3.384 12.744L1.104 12.624L0.528 12.504L0 11.784L0.048 11.424L0.528 11.112L1.224 11.16L2.736 11.28L5.016 11.424L6.672 11.52L9.12 11.784H9.504L9.552 11.616L9.432 11.52L9.336 11.424L6.96 9.84L4.416 8.16L3.072 7.176L2.352 6.672L1.992 6.216L1.848 5.208L2.496 4.488L3.384 4.56L3.6 4.608L4.488 5.304L6.384 6.768L8.88 8.616L9.24 8.904L9.408 8.808V8.736L9.24 8.472L7.896 6.024L6.456 3.528L5.808 2.496L5.64 1.872C5.576 1.656 5.544 1.416 5.544 1.152L6.288 .144L6.696 0L7.704 .144L8.112 .504L8.736 1.92L9.72 4.152L11.28 7.176L11.736 8.088L11.976 8.904L12.072 9.168H12.24V9.024L12.36 7.296L12.6 5.208L12.84 2.52L12.912 1.752L13.296 .84L14.04 .36L14.616 .624L15.096 1.32L15.024 1.752L14.76 3.6L14.184 6.504L13.824 8.472H14.04L14.28 8.208L15.264 6.912L16.92 4.848L17.64 4.032L18.504 3.12L19.056 2.688H20.088L20.832 3.816L20.496 4.992L19.44 6.336L18.552 7.464L17.28 9.168L16.512 10.536L16.584 10.632H16.752L19.608 10.008L21.168 9.744L22.992 9.432L23.832 9.816L23.928 10.2L23.592 11.016L21.624 11.496L19.32 11.952L15.888 12.768L15.84 12.792L15.888 12.864L17.424 13.008L18.096 13.056H19.728L22.752 13.272L23.544 13.8L24 14.424L23.928 14.928L22.704 15.528L21.072 15.144L17.232 14.232L15.936 13.92H15.744V14.016L16.848 15.096L18.84 16.896L21.36 19.224L21.48 19.8L21.168 20.28L20.832 20.232L18.624 18.552L17.76 17.808L15.84 16.2H15.72V16.368L16.152 17.016L18.504 20.544L18.624 21.624L18.456 21.96L17.832 22.176L17.184 22.056L15.792 20.136L14.376 17.952L13.224 16.008L13.104 16.104L12.408 23.352L12.096 23.712L11.376 24Z"/></svg></div>
     <div class="slide-label">Let's Connect</div>
     <div class="slide-title">Networking</div>
