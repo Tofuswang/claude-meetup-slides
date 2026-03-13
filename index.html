@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude Code for Everyone — Taipei</title>
+<style>
+  @font-face { font-family: 'Anthropic Sans'; src: url('fonts/AnthropicSans-Roman.woff2') format('woff2'); font-weight: 300 800; font-style: normal; }
+  @font-face { font-family: 'Anthropic Sans'; src: url('fonts/AnthropicSans-Italic.woff2') format('woff2'); font-weight: 300 800; font-style: italic; }
+  @font-face { font-family: 'Anthropic Serif'; src: url('fonts/AnthropicSerif-Roman.woff2') format('woff2'); font-weight: 300 800; font-style: normal; }
+  @font-face { font-family: 'Anthropic Mono'; src: url('fonts/AnthropicMono-Roman.woff2') format('woff2'); font-weight: 300 800; font-style: normal; }
+  @font-face { font-family: 'Noto Sans TC'; src: url('fonts/NotoSans-Regular.woff2') format('woff2'); font-weight: 400; }
+  @font-face { font-family: 'Noto Sans TC'; src: url('fonts/NotoSans-Medium.woff2') format('woff2'); font-weight: 500; }
+  @font-face { font-family: 'Noto Sans TC'; src: url('fonts/NotoSans-SemiBold.woff2') format('woff2'); font-weight: 600; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #1A1918; }
+
+  :root {
+    --bg-warm: #FAF9F5;
+    --bg-light: #F0EEE6;
+    --bg-card: #E8E6DC;
+    --bg-dark: #1A1918;
+    --text-primary: #141413;
+    --text-secondary: #5E5D59;
+    --text-muted: #B0AEA5;
+    --accent: #D97757;
+    --green: #BCD1CA;
+    --purple: #CBCBDB;
+  }
+
+  body { font-family: 'Anthropic Sans', 'Noto Sans TC', sans-serif; }
+
+  /* Slide container */
+  .deck { width: 100vw; height: 100vh; position: relative; }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6vh 8vw;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    transform: translateX(30px);
+  }
+  .slide.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+  }
+  .slide.prev {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-30px);
+  }
+
+  /* Backgrounds */
+  .slide--warm { background: var(--bg-warm); color: var(--text-primary); }
+  .slide--light { background: var(--bg-light); color: var(--text-primary); }
+  .slide--dark { background: var(--bg-dark); color: #FAF9F5; }
+  .slide--accent { background: var(--accent); color: #FAF9F5; }
+
+  /* Typography */
+  .slide-label {
+    font-family: 'Anthropic Mono', monospace;
+    font-size: clamp(12px, 1.2vw, 18px);
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 2vh;
+  }
+  .slide--dark .slide-label, .slide--accent .slide-label { color: rgba(250,249,245,0.45); }
+
+  .slide-title {
+    font-family: 'Anthropic Serif', 'Noto Sans TC', serif;
+    font-size: clamp(48px, 7vw, 120px);
+    font-weight: 400;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    margin-bottom: 3vh;
+  }
+
+  .slide-subtitle {
+    font-size: clamp(18px, 2.2vw, 36px);
+    font-weight: 400;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    max-width: 50vw;
+  }
+  .slide--dark .slide-subtitle, .slide--accent .slide-subtitle { color: rgba(250,249,245,0.7); }
+
+  .slide-items {
+    list-style: none;
+    margin-top: 4vh;
+  }
+  .slide-items li {
+    font-size: clamp(16px, 2vw, 30px);
+    line-height: 1.6;
+    padding: 1.2vh 0;
+    border-bottom: 1px solid var(--bg-card);
+    display: flex;
+    align-items: center;
+    gap: 1.2vw;
+  }
+  .slide--dark .slide-items li { border-bottom-color: rgba(250,249,245,0.08); color: #FAF9F5; }
+  .slide-items li .dot {
+    width: clamp(6px, 0.6vw, 10px);
+    height: clamp(6px, 0.6vw, 10px);
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* Center variant */
+  .slide--center { justify-content: center; align-items: center; text-align: center; }
+  .slide--center .slide-subtitle { max-width: 40vw; }
+
+  /* Sparkle */
+  .sparkle {
+    position: absolute;
+    opacity: 0.06;
+    pointer-events: none;
+  }
+  .sparkle--tr { top: 6vh; right: 6vw; width: clamp(100px, 14vw, 220px); }
+  .sparkle--large { top: 50%; right: 8vw; transform: translateY(-50%); width: clamp(200px, 25vw, 420px); }
+
+  /* Footer */
+  .slide-footer {
+    position: absolute;
+    bottom: 3vh;
+    left: 8vw;
+    right: 8vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: clamp(10px, 1.1vw, 16px);
+    color: var(--text-muted);
+    font-family: 'Anthropic Mono', monospace;
+    letter-spacing: 1px;
+  }
+  .slide--dark .slide-footer, .slide--accent .slide-footer { color: rgba(250,249,245,0.3); }
+  .slide-footer svg { height: clamp(14px, 1.4vw, 22px); fill: currentColor; }
+
+  /* Accent strip */
+  .accent-strip { position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: var(--accent); }
+
+  /* Speaker */
+  .speaker-card { display: flex; align-items: center; gap: 3vw; margin-top: 5vh; }
+  .speaker-avatar {
+    width: clamp(100px, 12vw, 200px);
+    height: clamp(100px, 12vw, 200px);
+    border-radius: 50%;
+    background: var(--bg-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(32px, 4vw, 64px);
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .speaker-name {
+    font-family: 'Anthropic Serif', serif;
+    font-size: clamp(28px, 3.6vw, 56px);
+    font-weight: 400;
+    margin-bottom: 0.5vh;
+  }
+  .speaker-role {
+    font-size: clamp(16px, 1.8vw, 28px);
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 1.5vh;
+  }
+  .speaker-topic {
+    font-size: clamp(16px, 1.8vw, 28px);
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* Code highlight */
+  .code-block {
+    font-family: 'Anthropic Mono', monospace;
+    font-size: clamp(36px, 5vw, 80px);
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 4px;
+    margin: 2vh 0;
+  }
+
+  .time-label {
+    font-family: 'Anthropic Mono', monospace;
+    font-size: clamp(14px, 1.6vw, 26px);
+    color: var(--accent);
+    letter-spacing: 2px;
+    margin-top: 5vh;
+  }
+
+  /* QR */
+  .qr-box {
+    width: clamp(160px, 18vw, 300px);
+    height: clamp(160px, 18vw, 300px);
+    background: var(--bg-warm);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Anthropic Mono', monospace;
+    font-size: clamp(12px, 1.2vw, 20px);
+    color: var(--text-muted);
+    margin-top: 3vh;
+  }
+
+  /* Progress bar */
+  .progress {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: var(--accent);
+    transition: width 0.4s ease;
+    z-index: 100;
+  }
+
+  /* Slide counter */
+  .counter {
+    position: fixed;
+    bottom: 1.5vh;
+    right: 2vw;
+    font-family: 'Anthropic Mono', monospace;
+    font-size: clamp(10px, 1vw, 14px);
+    color: rgba(255,255,255,0.25);
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  /* Italic serif for quotes */
+  .serif-italic {
+    font-family: 'Anthropic Serif', serif;
+    font-style: italic;
+    font-size: clamp(18px, 2vw, 32px);
+    color: rgba(250,249,245,0.45);
+    margin-top: 5vh;
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- 1: Title -->
+  <div class="slide slide--dark active" data-slide="0">
+    <div class="sparkle sparkle--tr"><svg viewBox="0 0 24 24" fill="#D97757"><path d="M11.376 24L10.776 23.544L10.44 22.8L10.776 21.312L11.16 19.392L11.472 17.856L11.76 15.96L11.928 15.336L11.904 15.288L11.784 15.312L10.344 17.28L8.16 20.232L6.432 22.056L6.024 22.224L5.304 21.864L5.376 21.192L5.784 20.616L8.16 17.568L9.6 15.672L10.536 14.592L10.512 14.448H10.464L4.128 18.576L3 18.72L2.496 18.264L2.568 17.52L2.808 17.28L4.704 15.96L9.432 13.32L9.504 13.08L9.432 12.96H9.192L8.4 12.912L5.712 12.84L3.384 12.744L1.104 12.624L0.528 12.504L0 11.784L0.048 11.424L0.528 11.112L1.224 11.16L2.736 11.28L5.016 11.424L6.672 11.52L9.12 11.784H9.504L9.552 11.616L9.432 11.52L9.336 11.424L6.96 9.84L4.416 8.16L3.072 7.176L2.352 6.672L1.992 6.216L1.848 5.208L2.496 4.488L3.384 4.56L3.6 4.608L4.488 5.304L6.384 6.768L8.88 8.616L9.24 8.904L9.408 8.808V8.736L9.24 8.472L7.896 6.024L6.456 3.528L5.808 2.496L5.64 1.872C5.576 1.656 5.544 1.416 5.544 1.152L6.288 .144L6.696 0L7.704 .144L8.112 .504L8.736 1.92L9.72 4.152L11.28 7.176L11.736 8.088L11.976 8.904L12.072 9.168H12.24V9.024L12.36 7.296L12.6 5.208L12.84 2.52L12.912 1.752L13.296 .84L14.04 .36L14.616 .624L15.096 1.32L15.024 1.752L14.76 3.6L14.184 6.504L13.824 8.472H14.04L14.28 8.208L15.264 6.912L16.92 4.848L17.64 4.032L18.504 3.12L19.056 2.688H20.088L20.832 3.816L20.496 4.992L19.44 6.336L18.552 7.464L17.28 9.168L16.512 10.536L16.584 10.632H16.752L19.608 10.008L21.168 9.744L22.992 9.432L23.832 9.816L23.928 10.2L23.592 11.016L21.624 11.496L19.32 11.952L15.888 12.768L15.84 12.792L15.888 12.864L17.424 13.008L18.096 13.056H19.728L22.752 13.272L23.544 13.8L24 14.424L23.928 14.928L22.704 15.528L21.072 15.144L17.232 14.232L15.936 13.92H15.744V14.016L16.848 15.096L18.84 16.896L21.36 19.224L21.48 19.8L21.168 20.28L20.832 20.232L18.624 18.552L17.76 17.808L15.84 16.2H15.72V16.368L16.152 17.016L18.504 20.544L18.624 21.624L18.456 21.96L17.832 22.176L17.184 22.056L15.792 20.136L14.376 17.952L13.224 16.008L13.104 16.104L12.408 23.352L12.096 23.712L11.376 24Z"/></svg></div>
+    <div class="slide-label">Taipei · Product & Design Venue @ PicCollage</div>
+    <div class="slide-title">Claude Code<br>for Everyone</div>
+    <div class="slide-subtitle">讓每個人都能用 Claude Code 打造產品</div>
+    <div class="slide-footer">
+      <span>2026</span>
+      <svg width="46" height="32" viewBox="0 0 46 32"><path d="M32.73 0h-6.945L38.45 32h6.945L32.73 0ZM12.665 0 0 32h7.082l2.59-6.72h13.25l2.59 6.72h7.082L19.929 0h-7.264Zm-.702 19.337 4.334-11.246 4.334 11.246h-8.668Z" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- 2: Venue -->
+  <div class="slide slide--warm" data-slide="1">
+    <div class="accent-strip"></div>
+    <div class="sparkle sparkle--large"><svg viewBox="0 0 24 24" fill="#D97757"><path d="M11.376 24L10.776 23.544L10.44 22.8L10.776 21.312L11.16 19.392L11.472 17.856L11.76 15.96L11.928 15.336L11.904 15.288L11.784 15.312L10.344 17.28L8.16 20.232L6.432 22.056L6.024 22.224L5.304 21.864L5.376 21.192L5.784 20.616L8.16 17.568L9.6 15.672L10.536 14.592L10.512 14.448H10.464L4.128 18.576L3 18.72L2.496 18.264L2.568 17.52L2.808 17.28L4.704 15.96L9.432 13.32L9.504 13.08L9.432 12.96H9.192L8.4 12.912L5.712 12.84L3.384 12.744L1.104 12.624L0.528 12.504L0 11.784L0.048 11.424L0.528 11.112L1.224 11.16L2.736 11.28L5.016 11.424L6.672 11.52L9.12 11.784H9.504L9.552 11.616L9.432 11.52L9.336 11.424L6.96 9.84L4.416 8.16L3.072 7.176L2.352 6.672L1.992 6.216L1.848 5.208L2.496 4.488L3.384 4.56L3.6 4.608L4.488 5.304L6.384 6.768L8.88 8.616L9.24 8.904L9.408 8.808V8.736L9.24 8.472L7.896 6.024L6.456 3.528L5.808 2.496L5.64 1.872C5.576 1.656 5.544 1.416 5.544 1.152L6.288 .144L6.696 0L7.704 .144L8.112 .504L8.736 1.92L9.72 4.152L11.28 7.176L11.736 8.088L11.976 8.904L12.072 9.168H12.24V9.024L12.36 7.296L12.6 5.208L12.84 2.52L12.912 1.752L13.296 .84L14.04 .36L14.616 .624L15.096 1.32L15.024 1.752L14.76 3.6L14.184 6.504L13.824 8.472H14.04L14.28 8.208L15.264 6.912L16.92 4.848L17.64 4.032L18.504 3.12L19.056 2.688H20.088L20.832 3.816L20.496 4.992L19.44 6.336L18.552 7.464L17.28 9.168L16.512 10.536L16.584 10.632H16.752L19.608 10.008L21.168 9.744L22.992 9.432L23.832 9.816L23.928 10.2L23.592 11.016L21.624 11.496L19.32 11.952L15.888 12.768L15.84 12.792L15.888 12.864L17.424 13.008L18.096 13.056H19.728L22.752 13.272L23.544 13.8L24 14.424L23.928 14.928L22.704 15.528L21.072 15.144L17.232 14.232L15.936 13.92H15.744V14.016L16.848 15.096L18.84 16.896L21.36 19.224L21.48 19.8L21.168 20.28L20.832 20.232L18.624 18.552L17.76 17.808L15.84 16.2H15.72V16.368L16.152 17.016L18.504 20.544L18.624 21.624L18.456 21.96L17.832 22.176L17.184 22.056L15.792 20.136L14.376 17.952L13.224 16.008L13.104 16.104L12.408 23.352L12.096 23.712L11.376 24Z"/></svg></div>
+    <div class="slide-label">Venue Guide</div>
+    <div class="slide-title">場地介紹</div>
+    <ul class="slide-items">
+      <li><span class="dot"></span>Wi-Fi 密碼將公布於現場白板</li>
+      <li><span class="dot"></span>飲食區位於入口右側，請自取</li>
+      <li><span class="dot"></span>廁所位於電梯旁</li>
+      <li><span class="dot"></span>拍照 & 錄影請尊重講者與參加者意願</li>
+    </ul>
+    <div class="time-label">1:00 PM — 4:30 PM</div>
+    <div class="slide-footer">
+      <span>Taipei · Claude Code for Everyone</span>
+      <span>Product & Design Venue @ PicCollage</span>
+    </div>
+  </div>
+
+  <!-- 3: Zeabur Credit -->
+  <div class="slide slide--light slide--center" data-slide="2">
+    <div class="slide-label">Free Credit</div>
+    <div class="slide-title" style="font-family:'Anthropic Sans',sans-serif;font-weight:600;letter-spacing:8px;">ZEABUR</div>
+    <div class="slide-subtitle">掃描 QR Code 領取 $10 USD 部署額度</div>
+    <div class="qr-box">[QR Code]</div>
+    <div style="margin-top:2vh;font-family:'Anthropic Mono',monospace;font-size:clamp(14px,1.6vw,24px);color:var(--accent);letter-spacing:2px;">zeabur.com</div>
+    <div class="slide-footer"><span>Taipei · Claude Code for Everyone</span><span></span></div>
+  </div>
+
+  <!-- 4: Break -->
+  <div class="slide slide--accent slide--center" data-slide="3">
+    <div class="slide-title">Break</div>
+    <div class="slide-subtitle" style="color:rgba(250,249,245,0.8);">休息 5 分鐘 · 上廁所 · 喝水 · 交流</div>
+    <div class="serif-italic">We'll be back shortly.</div>
+  </div>
+
+  <!-- 5: Slido -->
+  <div class="slide slide--dark slide--center" data-slide="4">
+    <div class="slide-label">Interactive</div>
+    <div class="slide-title">Slido Q&A</div>
+    <div class="slide-subtitle">用 Slido 即時提問 & 投票</div>
+    <div style="margin-top:2vh;font-family:'Anthropic Mono',monospace;font-size:clamp(14px,1.4vw,22px);color:rgba(250,249,245,0.35);">slido.com</div>
+    <div class="code-block">#XXXXXX</div>
+    <div style="font-size:clamp(14px,1.4vw,22px);color:rgba(250,249,245,0.35);">輸入活動代碼加入</div>
+    <div class="slide-footer"><span>Taipei · Claude Code for Everyone</span><span></span></div>
+  </div>
+
+  <!-- 6: Speaker -->
+  <div class="slide slide--warm" data-slide="5">
+    <div class="accent-strip"></div>
+    <div class="slide-label">Next Speaker</div>
+    <div class="speaker-card">
+      <div class="speaker-avatar">YL</div>
+      <div>
+        <div class="speaker-name">Yuanlin Lin 林沅霖</div>
+        <div class="speaker-role">Founder of Zeabur</div>
+        <div class="speaker-topic">Zeabur 團隊如何使用 Claude Code 建造 Zeabur</div>
+      </div>
+    </div>
+    <div class="slide-footer"><span>Taipei · Claude Code for Everyone</span><span></span></div>
+  </div>
+
+  <!-- 7: Wrap Up -->
+  <div class="slide slide--light" data-slide="6">
+    <div class="sparkle sparkle--large"><svg viewBox="0 0 24 24" fill="#D97757"><path d="M11.376 24L10.776 23.544L10.44 22.8L10.776 21.312L11.16 19.392L11.472 17.856L11.76 15.96L11.928 15.336L11.904 15.288L11.784 15.312L10.344 17.28L8.16 20.232L6.432 22.056L6.024 22.224L5.304 21.864L5.376 21.192L5.784 20.616L8.16 17.568L9.6 15.672L10.536 14.592L10.512 14.448H10.464L4.128 18.576L3 18.72L2.496 18.264L2.568 17.52L2.808 17.28L4.704 15.96L9.432 13.32L9.504 13.08L9.432 12.96H9.192L8.4 12.912L5.712 12.84L3.384 12.744L1.104 12.624L0.528 12.504L0 11.784L0.048 11.424L0.528 11.112L1.224 11.16L2.736 11.28L5.016 11.424L6.672 11.52L9.12 11.784H9.504L9.552 11.616L9.432 11.52L9.336 11.424L6.96 9.84L4.416 8.16L3.072 7.176L2.352 6.672L1.992 6.216L1.848 5.208L2.496 4.488L3.384 4.56L3.6 4.608L4.488 5.304L6.384 6.768L8.88 8.616L9.24 8.904L9.408 8.808V8.736L9.24 8.472L7.896 6.024L6.456 3.528L5.808 2.496L5.64 1.872C5.576 1.656 5.544 1.416 5.544 1.152L6.288 .144L6.696 0L7.704 .144L8.112 .504L8.736 1.92L9.72 4.152L11.28 7.176L11.736 8.088L11.976 8.904L12.072 9.168H12.24V9.024L12.36 7.296L12.6 5.208L12.84 2.52L12.912 1.752L13.296 .84L14.04 .36L14.616 .624L15.096 1.32L15.024 1.752L14.76 3.6L14.184 6.504L13.824 8.472H14.04L14.28 8.208L15.264 6.912L16.92 4.848L17.64 4.032L18.504 3.12L19.056 2.688H20.088L20.832 3.816L20.496 4.992L19.44 6.336L18.552 7.464L17.28 9.168L16.512 10.536L16.584 10.632H16.752L19.608 10.008L21.168 9.744L22.992 9.432L23.832 9.816L23.928 10.2L23.592 11.016L21.624 11.496L19.32 11.952L15.888 12.768L15.84 12.792L15.888 12.864L17.424 13.008L18.096 13.056H19.728L22.752 13.272L23.544 13.8L24 14.424L23.928 14.928L22.704 15.528L21.072 15.144L17.232 14.232L15.936 13.92H15.744V14.016L16.848 15.096L18.84 16.896L21.36 19.224L21.48 19.8L21.168 20.28L20.832 20.232L18.624 18.552L17.76 17.808L15.84 16.2H15.72V16.368L16.152 17.016L18.504 20.544L18.624 21.624L18.456 21.96L17.832 22.176L17.184 22.056L15.792 20.136L14.376 17.952L13.224 16.008L13.104 16.104L12.408 23.352L12.096 23.712L11.376 24Z"/></svg></div>
+    <div class="slide-label">Wrap Up</div>
+    <div class="slide-title">謝謝大家</div>
+    <ul class="slide-items">
+      <li><span class="dot"></span>今天的重點回顧</li>
+      <li><span class="dot"></span>感謝所有講者 & 參加者</li>
+      <li><span class="dot"></span>活動照片 & 筆記稍後分享</li>
+      <li><span class="dot"></span>追蹤 Claude Community Events</li>
+    </ul>
+    <div class="slide-footer"><span>Taipei · Claude Code for Everyone</span><span></span></div>
+  </div>
+
+  <!-- 8: Networking -->
+  <div class="slide slide--dark slide--center" data-slide="7">
+    <div class="sparkle sparkle--tr" style="opacity:0.12;"><svg viewBox="0 0 24 24" fill="#D97757"><path d="M11.376 24L10.776 23.544L10.44 22.8L10.776 21.312L11.16 19.392L11.472 17.856L11.76 15.96L11.928 15.336L11.904 15.288L11.784 15.312L10.344 17.28L8.16 20.232L6.432 22.056L6.024 22.224L5.304 21.864L5.376 21.192L5.784 20.616L8.16 17.568L9.6 15.672L10.536 14.592L10.512 14.448H10.464L4.128 18.576L3 18.72L2.496 18.264L2.568 17.52L2.808 17.28L4.704 15.96L9.432 13.32L9.504 13.08L9.432 12.96H9.192L8.4 12.912L5.712 12.84L3.384 12.744L1.104 12.624L0.528 12.504L0 11.784L0.048 11.424L0.528 11.112L1.224 11.16L2.736 11.28L5.016 11.424L6.672 11.52L9.12 11.784H9.504L9.552 11.616L9.432 11.52L9.336 11.424L6.96 9.84L4.416 8.16L3.072 7.176L2.352 6.672L1.992 6.216L1.848 5.208L2.496 4.488L3.384 4.56L3.6 4.608L4.488 5.304L6.384 6.768L8.88 8.616L9.24 8.904L9.408 8.808V8.736L9.24 8.472L7.896 6.024L6.456 3.528L5.808 2.496L5.64 1.872C5.576 1.656 5.544 1.416 5.544 1.152L6.288 .144L6.696 0L7.704 .144L8.112 .504L8.736 1.92L9.72 4.152L11.28 7.176L11.736 8.088L11.976 8.904L12.072 9.168H12.24V9.024L12.36 7.296L12.6 5.208L12.84 2.52L12.912 1.752L13.296 .84L14.04 .36L14.616 .624L15.096 1.32L15.024 1.752L14.76 3.6L14.184 6.504L13.824 8.472H14.04L14.28 8.208L15.264 6.912L16.92 4.848L17.64 4.032L18.504 3.12L19.056 2.688H20.088L20.832 3.816L20.496 4.992L19.44 6.336L18.552 7.464L17.28 9.168L16.512 10.536L16.584 10.632H16.752L19.608 10.008L21.168 9.744L22.992 9.432L23.832 9.816L23.928 10.2L23.592 11.016L21.624 11.496L19.32 11.952L15.888 12.768L15.84 12.792L15.888 12.864L17.424 13.008L18.096 13.056H19.728L22.752 13.272L23.544 13.8L24 14.424L23.928 14.928L22.704 15.528L21.072 15.144L17.232 14.232L15.936 13.92H15.744V14.016L16.848 15.096L18.84 16.896L21.36 19.224L21.48 19.8L21.168 20.28L20.832 20.232L18.624 18.552L17.76 17.808L15.84 16.2H15.72V16.368L16.152 17.016L18.504 20.544L18.624 21.624L18.456 21.96L17.832 22.176L17.184 22.056L15.792 20.136L14.376 17.952L13.224 16.008L13.104 16.104L12.408 23.352L12.096 23.712L11.376 24Z"/></svg></div>
+    <div class="slide-label">Let's Connect</div>
+    <div class="slide-title">Networking</div>
+    <div class="slide-subtitle" style="font-size:clamp(22px,2.5vw,40px);">自由交流 · 認識新朋友 · 交換聯繫方式</div>
+    <div class="slide-footer">
+      <span>Taipei · Claude Code for Everyone</span>
+      <svg width="46" height="32" viewBox="0 0 46 32"><path d="M32.73 0h-6.945L38.45 32h6.945L32.73 0ZM12.665 0 0 32h7.082l2.59-6.72h13.25l2.59 6.72h7.082L19.929 0h-7.264Zm-.702 19.337 4.334-11.246 4.334 11.246h-8.668Z" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+</div>
+
+<div class="progress" id="progress"></div>
+<div class="counter" id="counter"></div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  function go(n) {
+    if (n < 0 || n >= total) return;
+    slides[current].classList.remove('active');
+    slides[current].classList.add('prev');
+    current = n;
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'prev');
+      if (i === current) s.classList.add('active');
+    });
+    document.getElementById('progress').style.width = ((current + 1) / total * 100) + '%';
+    document.getElementById('counter').textContent = (current + 1) + ' / ' + total;
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'ArrowDown') { e.preventDefault(); go(current + 1); }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); go(current - 1); }
+    if (e.key === 'Home') go(0);
+    if (e.key === 'End') go(total - 1);
+    if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    }
+  });
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) { dx < 0 ? go(current + 1) : go(current - 1); }
+  });
+
+  // Click left/right halves
+  document.addEventListener('click', (e) => {
+    if (e.clientX > window.innerWidth * 0.65) go(current + 1);
+    else if (e.clientX < window.innerWidth * 0.35) go(current - 1);
+  });
+
+  // Init
+  go(0);
+</script>
+</body>
+</html>
